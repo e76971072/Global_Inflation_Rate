@@ -4,9 +4,6 @@
 //
 //
 
-
-
-
 function loadData ( ) {
 
 	const slider = document.getElementById('slider1');
@@ -103,22 +100,22 @@ function loadData ( ) {
 
 	  // Add the map features to the SVG container
 
-	  const annotations = [
-		{
-		  note: { label: "Hi How are you ?" },
-		  x: 500,
-		  y: 100,
-		  dy: 137,
-		  dx: 162,
-		  subject: { radius: 50, radiusPadding: 10 },
-		},
-	  ];
+	//   const annotations = [
+	// 	{
+	// 	  note: { label: "Hi How are you ?" },
+	// 	  x: 500,
+	// 	  y: 100,
+	// 	  dy: 137,
+	// 	  dx: 162,
+	// 	  subject: { radius: 50, radiusPadding: 10 },
+	// 	},
+	//   ];
 
 
-	  d3.select("svg")
-		.append("g")
-		.attr("class", "annotation-group")
-		.call(d3.annotation().annotations(annotations));
+	//   d3.select("svg")
+	// 	.append("g")
+	// 	.attr("class", "annotation-group")
+	// 	.call(d3.annotation().annotations(annotations));
 
 	  map.selectAll("path")
 		.data(countries)
@@ -188,16 +185,17 @@ function loadData ( ) {
             // Extract the x and y coordinates from the bounding box
             const x = bbox.x;
             const y = bbox.y;
+			console.log(window.length);
 
 			console.log( d3.select("#" + d.properties.name).node());
 			const annotations = [
 				{
 				  note: { label: d.properties.name },
-				  x: x + 70,
-				  y: y + 70,
+				  x: x ,
+				  y: y  * 1.1,
 				  dy:50,
 				  dx: 100,
-				  color: "orange",
+				  color: "black",
 				  subject: { radius: 0, radiusPadding: 0 },
 				},
 			  ];
@@ -261,8 +259,18 @@ function loadData ( ) {
 			 }
 
  		})
-		 var details = tbody.append("tr");
-		 details.text(  'Average Inflation Rate from 1960 - 2022: ' + (avgInflation/ numYears).toFixed(2) + '%');
+
+
+
+
+		//  tbody.selectAll("details").remove();
+		var detailsDiv = d3.select('.detailsOnDemand')
+		detailsDiv.selectAll("details").remove();
+		var details = detailsDiv.append("details");
+		details.append("summary").text("More Details");
+		details.append("p").text( avgInflation != 0 ? 'Average Inflation Rate from 1960 - 2022: ' + (avgInflation/ numYears).toFixed(2) + '%': "Not Available");
+
+		//  tab.append("th").text( avgInflation != 0 ? 'Average Inflation Rate from 1960 - 2022: ' + (avgInflation/ numYears).toFixed(2) + '%': "Not Available");
 
 	}
 	// generate Year range
@@ -290,5 +298,5 @@ function loadData ( ) {
 			})
 		})
 		return filterData;
-}
+ }
 }
