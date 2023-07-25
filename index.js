@@ -180,15 +180,25 @@ function loadData ( ) {
 		.attr("stroke", "#fff")
 		.on("click", function (event, d) {
 			// 'this' refers to the clicked path element
+			const clickedElement = event.target;
+
+            // Get the bounding box of the element
+            const bbox = clickedElement.getBBox();
+
+            // Extract the x and y coordinates from the bounding box
+            const x = bbox.x;
+            const y = bbox.y;
+
 			console.log( d3.select("#" + d.properties.name).node());
 			const annotations = [
 				{
 				  note: { label: d.properties.name },
-				  x: this.x,
-				  y: this.y,
-				  dy: 200,
-				  dx: 200,
-				  subject: { radius: 50, radiusPadding: 10 },
+				  x: x + 70,
+				  y: y + 70,
+				  dy:50,
+				  dx: 100,
+				  color: "orange",
+				  subject: { radius: 0, radiusPadding: 0 },
 				},
 			  ];
 
