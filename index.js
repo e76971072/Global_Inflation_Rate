@@ -32,7 +32,6 @@ async function loadData ( ) {
 
 
 	})
-	d3.select(".tableContainer").style("visibility", 'hidden');
 	d3.select(".sliderRange").style("visibility", 'hidden');
 
 

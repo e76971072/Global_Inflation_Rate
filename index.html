@@ -11,11 +11,28 @@
 	<div class="tabGroup">
 		<button id="Overview"> Overview </button>
 		<button id="Explore">  Free Exploration </button>
-	</div>
-    <div id="container">
+		<div>
+			<br/>
 
-      <svg id="svgMap"></svg>
-      <div id="countryDisplay"></div>
+			Data source:
+			<br/>
+
+			<a href="https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG?end=2022&start=2022&view=map" target="_blank">Inflation Data 2960 - 2022</a>
+			<br/>
+			<a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD" target="_blank">GDP Data 1990 - 2022</a>
+
+		</div>
+
+	</div>
+
+	<div id="container">
+
+
+      <svg id="svgMap">
+
+	  </svg>
+      <div id="countryDisplay">
+	  </div>
       <div class="sliderRange">
         <div>
           <label for="cars">Choose a year:</label>
@@ -42,6 +59,8 @@
         <table class="myTable" id="myTable"></table>
 		<div class="detailsOnDemand"></div>
       </div>
+
+
     </div>
     <style>
       .myTable td {
@@ -93,10 +112,9 @@
       }
       .tableContainer {
         flex: 1;
-        margin-left: 1%;
         margin-right: 2%;
 		margin-top: 5%;
-        width:   fit-content;
+        width:   500px;
         height: 500px;
         overflow-x: auto;
 		border-radius: 5px;
@@ -121,6 +139,10 @@
 		margin-top: 5%;
 		visibility: hidden;
 	  }
+	  .title {
+		transform: translate(350px, 0);
+
+	  }
     </style>
 
     <!-- <div id="tableContainer">
@@ -131,10 +153,6 @@
     <script src="index.js">
       // Your D3.js code for visualization goes here
     </script>
-    <h2>
-      Data source:
-      https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG?end=2022&start=2022&view=map
-	  https://data.worldbank.org/indicator/NY.GDP.MKTP.CD
-    </h2>
+
   </body>
 </html>
