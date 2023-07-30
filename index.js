@@ -13,6 +13,29 @@ async function loadData ( ) {
 	var table  = d3.select("table");
 	var tbody;
 	var headers;
+	var svgPath;
+
+
+
+	var buttonExplore = d3.select("#Explore");
+	buttonExplore.on("click", function (d) {
+			d3.select(".sliderRange").style("visibility", 'visible');
+			d3.select(".tableContainer").style("visibility", 'visible');
+
+	})
+
+
+	var buttonExplore = d3.select("#Overview");
+	buttonExplore.on("click", function (d) {
+			d3.select(".tableContainer").style("visibility", 'hidden');
+			d3.select(".sliderRange").style("visibility", 'hidden');
+
+
+	})
+	d3.select(".tableContainer").style("visibility", 'hidden');
+	d3.select(".sliderRange").style("visibility", 'hidden');
+
+
 
 	d3.csv('./Inflation_Consumer_Prices/data.csv').then( function(data) {
 		d3.csv ("./P_Data_Extract_From_World_Development_Indicators/GDP.csv").then( function (GDPdata) {
@@ -102,17 +125,12 @@ async function loadData ( ) {
 			 // 	.attr("class", "annotation-group")
 			 // 	.call(d3.annotation().annotations(annotations));
 
-			 map.selectAll("path")
+			svgPath = map.selectAll("path")
 				 .data(countries)
 				 .enter().append("path")
 				 .attr("d", path)
 				 .attr("stroke", "#fff")
-				 .on("click", function (event, d) {
-					 // 'this' refers to the clicked path element
 
-					 displayTableOnDemand( d.properties.name);
-					 // Perform your desired actions here based on the clicked country
-				 })
 				 .attr("fill",  function (d) {
 					 var inflationValue = 0;
 					 for  ( i =0; i  < mappedData.length; i ++ ) {
@@ -153,7 +171,7 @@ async function loadData ( ) {
 				// Create a group for the map features
 				var tooltip = d3.select("#countryDisplay");
 				// Add the map features to the SVG container
-				map.selectAll("path")
+				svgPath = map.selectAll("path")
 					.data(countries)
 					.enter().append("path")
 					.attr("d", path)
@@ -192,7 +210,17 @@ async function loadData ( ) {
 						// Perform your desired actions here based on the clcked country
 					})
 					.on ('mouseover',  function( d ) {
-						tooltip.style("visibility", "visible").text(d.srcElement.id);
+						var GDP = 0;
+						Object.keys(GDPdata).forEach ( function (key) {
+								if (GDPdata[key]['Country Name'].includes(d.srcElement.id)) {
+									 GDP = GDPdata[key]['2022 [YR2022]'];
+								}
+						})
+						tooltip.selectAll('p').remove();
+						tooltip.style("visibility", "visible").append('p').text(d.srcElement.id).attr("dy", "0em");
+ 						tooltip.style("visibility", "visible").append('p').text(GDP ?' GDP: ' + formatNumberWithUnits(GDP) : 'Not Available').attr("dy", "1em").attr("font-size", '10px');
+						tooltip.style("visibility", "visible").append('p').text(" 🖱️ → 🔍 ").attr("dy", "2em");
+
 					} )
 					.on("mousemove", function(event){
 						return tooltip.style("top", (event.pageY * 1.1 )+"px").style("left",(event.pageX  * 1.1)+"px");})
@@ -229,15 +257,21 @@ async function loadData ( ) {
 					var numYears = 0;
 					var gdp ;
 					var percentage;
+					var previousYear ;
+					var previousinflation ;
 					Object.keys(inflationData).forEach ( function(key) {
 
 						if (key.includes(countryName)) {
 							gdp = GDPdata[ inflationData[key] ['Country Code']] ['2022 [YR2022]'];
 							percentage = ((gdp - GDPdata[ inflationData[key] ['Country Code']] ['1990 [YR1990]']) / GDPdata[ inflationData[key] ['Country Code']] ['1990 [YR1990]']) * 100
+							previousYear = ((GDPdata[ inflationData[key] ['Country Code']] ['2022 [YR2022]'] - GDPdata[ inflationData[key] ['Country Code']] ['2021 [YR2021]']) / GDPdata[ inflationData[key] ['Country Code']] ['2021 [YR2021]']) * 100
 
 							for ( i in headers ) {
 								tableRow.append("td").text(inflationData[key][headers[i]]);
 								if  (! ( exCols.includes(headers[i])))  {
+										if (inflationData[key]['2022'] != '') {
+											previousinflation = ((inflationData[key]['2022']  - inflationData[key]['2021']) );
+										}
 										if( ( inflationData[key][headers[i]]) === "") {
 											avgInflation+=0 ;
 											continue;
@@ -261,8 +295,12 @@ async function loadData ( ) {
 					var details = detailsDiv.append("details");
 					details.append("summary").text("More Details");
 					details.append("p").text( avgInflation != 0 ? "Average Inflation Rate from '60-'22: " + (avgInflation/ numYears).toFixed(2) + '%': " Inflation Data Not Available");
- 					details.append("p").text('2022 GDP: ' + formatNumberWithUnits(gdp) + ' 🏦 ');
-					details.append("p").text ("Percentage Change GDP growth: " + percentage.toFixed(2) + '%⬆')
+					details.append("p").text(   previousinflation.toFixed(2) > 0 ?     '     Annual inflation rate: ' +  previousinflation.toFixed(2) + '% ⬆️' :  '     Annual inflation rate: ' +  previousinflation.toFixed(2) + '% ⬇️' );
+ 					details.append("p").text('      2022 GDP: ' + formatNumberWithUnits(gdp) + ' 🏦 ');
+					details.append("p").text ("     % Change GDP growth: " + percentage.toFixed(2) + '% ⬆️' + '1990 - 2022')
+					details.append("p").text ("     % Annual GDP growth: " + previousYear.toFixed(2) + '% ⬆️')
+					details.selectAll("p").attr("margin-left", '10px');
+
 
 
 
