@@ -105,24 +105,6 @@ async function loadData ( ) {
 				 reColor("2022");
 			 // Create a group for the map features
 
-			 // Add the map features to the SVG container
-
-			 //   const annotations = [
-			 // 	{
-			 // 	  note: { label: "Hi How are you ?" },
-			 // 	  x: 500,
-			 // 	  y: 100,
-			 // 	  dy: 137,
-			 // 	  dx: 162,
-			 // 	  subject: { radius: 50, radiusPadding: 10 },
-			 // 	},
-			 //   ];
-
-
-			 //   d3.select("svg")
-			 // 	.append("g")
-			 // 	.attr("class", "annotation-group")
-			 // 	.call(d3.annotation().annotations(annotations));
 
 			svgPath = map.selectAll("path")
 				 .data(countries)
@@ -201,10 +183,7 @@ async function loadData ( ) {
 						];
 
 						d3.select("svg").selectAll(".annotation-group").remove();
-						//   d3.select("svg")
-						// 	.append("g")
-						// 	.attr("class", "annotation-group")
-						// 	.call(d3.annotation().annotations(annotations));
+
 						displayTableOnDemand(  d.properties.name);
 						// Perform your desired actions here based on the clcked country
 					})
@@ -287,8 +266,6 @@ async function loadData ( ) {
 
 					})
 					console.log( formatNumberWithUnits(gdp));
-
-					//  tbody.selectAll("details").remove();
 					var detailsDiv = d3.select('.detailsOnDemand')
 					detailsDiv.selectAll("details").remove();
 					var details = detailsDiv.append("details");
@@ -299,11 +276,6 @@ async function loadData ( ) {
 					details.append("p").text ("     % Change GDP growth: " + percentage.toFixed(2) + '% ⬆️' + '1990 - 2022')
 					details.append("p").text ("     % Annual GDP growth: " + previousYear.toFixed(2) + '% ⬆️')
 					details.selectAll("p").attr("margin-left", '10px');
-
-
-
-
-					//  tab.append("th").text( avgInflation != 0 ? 'Average Inflation Rate from 1960 - 2022: ' + (avgInflation/ numYears).toFixed(2) + '%': "Not Available");
 
 				}
 				// generate Year range
